@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  node-exporter:
+    network_mode: host
+    pid: host
+    image: 'quay.io/prometheus/node-exporter:latest'
+    volumes:
+      - '/proc:/host/proc:ro'
+      - '/sys:/host/sys:ro'
+      - '/:/rootfs:ro'
+    command:
+      - '--path.rootfs=/rootfs'
+
+  prometheus:
+    container_name: prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    image: prom/prometheus
+
+  grafana:
+    container_name: grafana
+    ports:
+      - '3000:3000' 
+    image: grafana/grafana
